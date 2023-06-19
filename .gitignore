@@ -8,6 +8,14 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+geoip/GeoLite2-City.mmdb
+geoip/GeoLite2-City-CSV_20230616
+geoip/GeoLite2-Country.mmdb
+geoip/GeoLite2-Country-CSV_20230616
+geoip/*/*.*
+geoip/*
+geoip/
+geoip/*.*
 build/
 develop-eggs/
 dist/

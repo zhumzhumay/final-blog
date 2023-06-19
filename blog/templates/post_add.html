@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 style="text-align: center;">Новый пост</h1>
+<article class="post">
+
+         <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Опубликовать</button>
+
+    </form>
+
+</article>
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 style="text-align: center;">Регистрация</h1>
+<article class="post">
+    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Зарегистрироваться</button>
+
+    </form>
+</article>
+
+
+{% endblock %}

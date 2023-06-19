@@ -1,0 +1,13 @@
+Django==4.1
+django-jazzmin
+django-bootstrap5
+django-filter
+djangorestframework
+djangorestframework-simplejwt
+drf-spectacular
+drf-spectacular-sidecar
+django-rest-swagger
+pillow
+django-crispy-forms
+geoip2
+wikipedia-api

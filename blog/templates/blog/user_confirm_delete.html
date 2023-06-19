@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 style="text-align: center;">Удаление профиля</h1>
+<article class="post"  style="margin: auto 0; text-align: center;">
+<p>Подтвердите удаление аккаунта {{user.username}}</p>
+
+<form action="" method="POST" style="margin: auto 0;">
+  {% csrf_token %}
+  <input type="submit" value="Удалить" />
+</form></article>
+{% endblock %}

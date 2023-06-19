@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Header -->
+<header id="header">
+					
+    <h1><a href="{% url 'index' %}">BLOG</a></h1>
+    
+    <nav class="links">
+        <ul>
+        
+            <li><a href="{% url 'post_add' %}" class="nav-item nav-link">Добавить пост</a></li>	
+            <li><a href="{% url 'update' pk=user.id %}" class="nav-item nav-link">Изменить профиль</a></li>
+    
+        </ul>
+    </nav>
+</header>
+<section id="sidebar">
+
+    <!-- Intro -->
+        <section id="intro">
+            <a href="#" class="logo"><img src="http://127.0.0.1:8000/media/{{user.avatar}}" alt="" /></a>
+            <header>
+                <h2>{{user.first_name}}</h2>
+                <p>{{user.email}}</a></p>
+            </header>
+        </section>
+
+    <!-- About -->
+    <section class="blurb" style="margin: auto 0;">
+        <h2>Обо мне:</h2>
+        <p>{{user.description}}</p>
+        <div><a href="{% url 'delete' pk=user.id%}"  class="button big">Удалить профиль</a></div>
+    </section>
+
+</section>
+
+<article class="post"  style="margin-right: auto;">
+   <form action="" method="post" style="margin: auto 0;" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Сохранить изменения" />
+
+</form> 
+</article>
+
+
+{% endblock %}

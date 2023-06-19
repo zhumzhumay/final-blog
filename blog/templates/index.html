@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div id="wrapper">
+				
+
+				<!-- Main -->
+					<div id="main">
+						
+
+
+						<!-- Post -->
+						<div class="mainpost" ></div>
+						
+					
+
+						<!-- Pagination -->
+						<ul class="actions pagination">
+							<li><a href="" class="disabled button big previous">Previous Page</a></li>
+							<li><a href="#" class="button big next">Next Page</a></li>
+						</ul>
+
+					</div>
+
+				<!-- Sidebar -->
+					<section id="sidebar">
+						<form action="" method="POST" >
+							{% csrf_token %}{{ form.as_p }}<input type="submit" name="submit" value="Найти" placeholder="Поиск"/>
+							<!-- <table>
+								<tr><td></td>
+								<td></td>
+									
+									</tr>
+							</table> -->
+							
+						</form>
+							
+<form action="" method="GET" >
+							{% csrf_token %}{{ sortform.as_p }}<input type="submit" name="submit" value="Сортировать" placeholder="Поиск"/>
+							<!-- <table>
+								<tr><td></td>
+								<td></td>
+									
+									</tr>
+							</table> -->
+							
+						</form>
+						<!-- Posts List -->
+							<section>
+								<ul class="posts minipost">
+									
+								</ul>
+							</section>
+
+						
+
+						<!-- Footer
+							<section id="footer">
+								<ul class="icons">
+									<li><a href="#" class="fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="fa-facebook"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="fa-rss"><span class="label">RSS</span></a></li>
+									<li><a href="#" class="fa-envelope"><span class="label">Email</span></a></li>
+								</ul>
+								<p class="copyright">&copy; Untitled. Crafted: <a href="http://designscrazed.org/">HTML5</a>.</p>
+							</section> -->
+
+					</section>
+
+			</div>
+			<script>
+
+                $(document).ready(function(){
+						$.get(`http://127.0.0.1:8000/api/post/?ordering={{sort}}&search={{aiman}}`, function(data, status){
+							for(let i=0;i<(data.count);i++){
+								let maindiv = document.createElement('div');
+								let minili = document.createElement('li');
+								maindiv.className="post";
+			
+								maindiv.innerHTML=`
+								<article class="post">
+									<header>
+										<div class="title">
+											<h2><a href="#">${data.results[i].title} </a></h2>
+											<p></p>
+										</div>
+										<div class="meta">
+											<time class="published">${data.results[i].date_time} </time>
+											<a href="#" class="author"><span class="name">${data.results[i].user_info.first_name} </span><img src="${data.results[i].user_info.avatar} " alt="" /></a>
+										</div>
+									</header>
+									<a href="#" class="image featured"><img src="${data.results[i].image} " alt="" /></a>
+									<p></p>
+									<footer>
+										<ul class="actions">
+											<li>${data.results[i].text}</li>
+											<table>
+									
+										
+									
+										
+									<tr><td>
+									<ul id='post${data.results[i].id}'></ul></td></tr><tr><td>
+								
+								</table>
+										
+										
+									</footer>
+								</article>
+								
+								`
+								minili.innerHTML=`
+								
+											<article>
+												<header>
+													<h3><a href="#">${data.results[i].title}</a></h3>
+													<time class="published">${data.results[i].date_time}</time>
+												</header>
+												<a href="#" class="image"><img src="${data.results[i].image}" alt="" /></a>
+											</article>
+										
+										`
+								document.querySelector('.mainpost').append(maindiv)
+								document.querySelector('.minipost').append(minili)
+								
+								let post_id=data.results[i].id;
+							$.get(`http://127.0.0.1:8000/${post_id}/getpostcomment/`, function(data, status){
+							for(let i=0;i<(data.count);i++){
+								let minili = document.createElement('div');
+	
+								minili.innerHTML=`
+								
+											<article>
+												<table>
+													<tr>
+														<td><h5><a href="#">${data.results[i].body}</a></h5></td>
+														<td><tr><time class="published">${data.results[i].date_time} от </time></tr>
+															<tr><a href="#" >${data.results[i].user_info.first_name}</a></tr></td>
+														</tr>
+												
+											</article>
+										
+										`
+								document.querySelector(`#post${post_id}`).append(minili)
+								
+							}  
+						})
+
+
+
+							}  
+						})
+					
+                });
+            </script>
+{% endblock %}

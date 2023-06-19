@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>BLOG</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link href="{% static 'bootstrap.min.css' %}" rel="stylesheet">
+		<link rel="stylesheet" href="{% static 'main.css' %}" />
+		<link rel="stylesheet" href="{% static 'font-awesome.min.css' %}" />
+		<link rel="stylesheet" href="{% static 'ie8.css' %}" />
+		<link rel="stylesheet" href="{% static 'ie9.css' %}" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+	</head>
+	<body>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		
+			
+
+				<!-- Header -->
+					<header id="header">
+						{% if user.is_authenticated %}
+						<h1><a href="{% url 'index' %}">BLOG</a></h1>
+						<h1><a href="{% url 'profile' username=user.username %}">{{user.first_name}}</a></h1>
+						{% else %}
+						<h1><a href="{% url 'index' %}">BLOG</a></h1>
+						{% endif %}
+						<nav class="links">
+							<ul>
+								<li><a href="{% url 'signin' %}">Авторизация/регистрация</a></li>
+								<li><a href="{% url 'wiki' %}">WIKI</a></li>
+								{% if user.is_authenticated %}
+				
+								<li><a href="{% url 'post_add' %}" class="nav-item nav-link">Добавить пост</a></li>	
+								
+								
+								{% endif %}
+								
+							</ul>
+							
+						</nav>
+						<nav>
+						<ul>
+							<li>
+								<!-- <a class="fa-search" href="#search">Search</a> -->
+								
+							</li>
+							<!-- <li><button class="button" id="search">Найти</button></li> -->
+						</ul>
+					</nav>
+				
+					</header>
+					
+
+          {% block content %}
+          {% endblock %}
+
+				
+
+				
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="assets/js/main.js"></script>
+			<script src="main.js"></script>
+
+	</body>
+</html>
+          
