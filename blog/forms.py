@@ -12,11 +12,17 @@ class LoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password')
+        widgets = {
+            'password':forms.PasswordInput(attrs={'label':'Пароль'})
+        }
 
 class RegisterForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'password','first_name', 'avatar', 'email')
+        widgets = {
+            'password':forms.PasswordInput(attrs={'label':'Пароль'})
+        }
 
 class SearchForm(forms.Form):
     aiman = forms.CharField(label='')

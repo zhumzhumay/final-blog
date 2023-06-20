@@ -1,3 +1,5 @@
+import json
+from django.views import View
 import django_filters.rest_framework
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -19,6 +21,8 @@ GetUserPostsSerializer, GetPostCommentsSerializer
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 import geoip2.database, wikipediaapi
+from django.contrib.contenttypes.models import ContentType
+
 
 
 
@@ -33,7 +37,7 @@ class GetUserPostsView(GenericViewSet ,mixins.ListModelMixin):
     def get_queryset(self):
         
         user = self.kwargs['fk']
-        return Post.objects.filter(user=user)
+        return Post.objects.filter(user=user).order_by('-date_post')
     
 class GetPostCommentsView(GenericViewSet ,mixins.ListModelMixin):
     serializer_class = GetPostCommentsSerializer
@@ -54,8 +58,6 @@ class TokenRefreshView(TokenRefreshSlidingView):
     serializer_class = TokenRefreshSerializer
 
 
-# class PostViewSet (mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin,
-#                    GenericViewSet):
 class PostViewSet(ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [AllowAny]
@@ -80,24 +82,19 @@ class UserDeleteView(DeleteView):
     success_url = reverse_lazy('index')
 
 
-# class PostCreateView(mixins.CreateModelMixin, GenericViewSet):
-#     permission_classes = [IsEditor | IsSuperAdmin]
-#     def get(self, request, *args, **kwargs):
-#         return Response(data={'success': 'You posted it'}, status=status.HTTP_200_OK)
-
 def index(request):
     # submitbutton= request.POST.get("submit")
     sortform = SortForm(request.GET or None)
     form = SearchForm(request.POST or None)
     sort = '-date_post'
+    aiman = ''
     if sortform.is_valid():
         sort = sortform.cleaned_data.get('items')
     if form.is_valid():
         aiman = form.cleaned_data.get("aiman")
        
-        return render(request, 'index.html',{'form':form, 'aiman':aiman, 'sortform':sortform})
         
-    return render(request, 'index.html',{'form':form, 'sort':sort, 'sortform':sortform})
+    return render(request, 'index.html',{'form':form, 'sort':sort, 'sortform':sortform, 'aiman':aiman,})
         
 def wiki(request):
     submitbutton= request.POST.get("submit")
@@ -160,7 +157,7 @@ def post_form(request):
             post.post_date = timezone.now()
             post.save()
             # img_obj = form.instance
-            return redirect('index')
+            return redirect('profile', request.user.username)
     else:
         form = PostForm()
     return render(request, 'post_add.html', {'form': form})
@@ -200,28 +197,58 @@ def profile(request, username):
             post = request.POST.get('post_id')
             comment.post=Post.objects.get(id=post)
             comment.save()
-        return HttpResponseRedirect(request.path)
-        # return render(request, 'profile.html', {'username':username, 'country':country, 'city':city, 'form':form})   
+        return HttpResponseRedirect(request.path) 
     else:
         form = CommentForm(initial={'body':None})
 
 
     return render(request, 'profile.html', {'username':username, 'country':country, 'city':city, 'form':form})
 
-def ttest(request):
-    return render(request, 'ttest.html')
+# def ttest(request):
+#     return render(request, 'ttest.html')
 
-# def login_form(request):
-#     if request.method == "POST":
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             # post = form.save(commit=False)
-#             # if Sessions.objects.get(id=User.objects.get(username=post.username).id):
-#             #     Sessions.objects.get(id=User.objects.get(username=post.username).id).delete()
-#             # post.date = timezone.now()
-#             # post.token =
-#             # post.save()
-#             return redirect('index')
-#     else:
-#         form = LoginForm()
-#     return render(request, 'signin.html', {'form': form})
+
+def single_post(request,title, pk):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.comment_date = timezone.now()
+            post = request.POST.get('post_id')
+            comment.post=Post.objects.get(id=post)
+            comment.save()
+        return HttpResponseRedirect(request.path) 
+    else:
+        form = CommentForm(initial={'body':None})
+    return render(request, 'single_post.html', {'title':title, 'pk':pk, 'form':form})
+
+# class VotesView(View):
+#     model = None    # Модель данных - Статьи или Комментарии
+#     vote_type = None # Тип комментария Like/Dislike
+ 
+#     def post(self, request, pk):
+#         obj = self.model.objects.get(pk=pk)
+#         # GenericForeignKey не поддерживает метод get_or_create
+#         try:
+#             likedislike = LikeDislike.objects.get(content_type=ContentType.objects.get_for_model(obj), object_id=obj.id, user=request.user)
+#             if likedislike.vote is not self.vote_type:
+#                 likedislike.vote = self.vote_type
+#                 likedislike.save(update_fields=['vote'])
+#                 result = True
+#             else:
+#                 likedislike.delete()
+#                 result = False
+#         except LikeDislike.DoesNotExist:
+#             obj.votes.create(user=request.user, vote=self.vote_type)
+#             result = True
+ 
+#         return HttpResponse(
+#             json.dumps({
+#                 "result": result,
+#                 "like_count": obj.votes.likes().count(),
+#                 "dislike_count": obj.votes.dislikes().count(),
+#                 "sum_rating": obj.votes.sum_rating()
+#             }),
+#             content_type="application/json"
+#         )

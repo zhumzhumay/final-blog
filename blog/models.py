@@ -2,6 +2,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin, AbstractBaseUser
 from django.db import models
 from django.utils import timezone
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
 from blog.managers import UserManager
 
@@ -48,6 +50,24 @@ class User(AbstractBaseUser, PermissionsMixin):
         else:
             return ''
 
+# class LikeDislike(models.Model):
+#     LIKE = 1
+#     DISLIKE = -1
+ 
+#     VOTES = (
+#         (DISLIKE, 'Не нравится'),
+#         (LIKE, 'Нравится')
+#     )
+ 
+#     vote = models.SmallIntegerField(verbose_name="Голос", choices=VOTES)
+#     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+ 
+#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+#     object_id = models.PositiveIntegerField()
+#     content_object = GenericForeignKey()
+ 
+#     objects = LikeDislikeManager()
+
 
 class Post(models.Model):
     # URGENT, BESTOFTHEDAY, REGULAR = range(1, 4)
@@ -63,10 +83,8 @@ class Post(models.Model):
     image = models.ImageField('Изображение', default='static/img/service-6.jpg')
     title = models.CharField(max_length=255, default='', null=True, blank=True, verbose_name='Заголовок')
     text = models.TextField(verbose_name="Текст", default='')
-    # text_author = models.CharField('Автор статьи', max_length=255, default="")
     date_post = models.DateTimeField(default=timezone.now, verbose_name="Дата")
-
-    # type = models.IntegerField('Тип новости', default=REGULAR, choices=NEWS_TYPES)
+    # votes = GenericRelation(LikeDislike, related_query_name='comments')
 
     class Meta:
         verbose_name = 'Пост'
@@ -86,7 +104,7 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     body = models.TextField('Комментарий', max_length=255)
     date_comment = models.DateTimeField(default=timezone.now, verbose_name="Дата")
-
+    
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
@@ -102,3 +120,4 @@ class PostSort(models.Model):
 
 
     items = models.CharField('Сортировать', choices=CHOICES, default='-date_post', max_length=100)
+

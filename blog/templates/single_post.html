@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mainpost"></div>
+		
+			<script>
+
+                $(document).ready(function(){
+                    $.get(`http://127.0.0.1:8000/api/post/{{pk}}/`, function(data, status){
+                            let maindiv = document.createElement('div');
+							
+                            maindiv.className="post";
+        
+                            maindiv.innerHTML=`
+							<article class="post">
+								<header>
+									<div class="title">
+										<h2><a href="http://127.0.0.1:8000/single_post/${data.id}/${data.title}">${data.title} </a></h2>
+										<p></p>
+									</div>
+									<div class="meta">
+										<time class="published">${data.date_time} </time>
+									</div>
+								</header>
+								<a href="#" class="image featured"><img src="${data.image} " alt="" /></a>
+								<div class="meta">
+											<time class="published">${data.date_time} </time>
+											<a href="http://127.0.0.1:8000/${data.user_info.username}/profile/" class="author"><span class="name">${data.user_info.first_name} </span><img src="${data.user_info.avatar} " alt="" /></a>
+										</div>
+								<footer><ul class="actions">
+									<p>${data.text}</p>
+									<table>
+									
+										<tr><td>
+										<ul id='post${data.id}'></ul></td></tr><tr><td>
+									
+									<li>	<form action="" method="POST" style="width:900px;" >
+												{% csrf_token %}{{ form.as_p }}<input type="hidden" name="post_id" value="${data.id}"/>
+												
+												
+											</form></li></td></tr></table>
+
+											</footer>
+										</article>
+							
+                            `
+                            
+									
+									
+							document.querySelector('.mainpost').append(maindiv);
+							let post_id=data.id;
+							$.get(`http://127.0.0.1:8000/${post_id}/getpostcomment/`, function(data, status){
+							for(let i=0;i<(data.count);i++){
+								let minili = document.createElement('div');
+	
+								minili.innerHTML=`
+								
+											<article>
+												<table>
+													<tr>
+														<td><h5><a href="#">${data.results[i].body}</a></h5></td>
+														<td><tr><time class="published">${data.results[i].date_time} от </time></tr>
+															<tr><a href="http://127.0.0.1:8000/${data.results[i].user_info.username}/profile/" >${data.results[i].user_info.first_name}</a></tr></td>
+														</tr>
+												
+											</article>
+										
+										`
+								document.querySelector(`#post${post_id}`).append(minili)
+								
+							}  
+						})
+					
+                
+                            
+						
+                    })
+
+					
+
+                });
+				
+            </script>
+
+			{% endblock %}

@@ -12,7 +12,7 @@
 						
 							<li><a href="{% url 'post_add' %}" class="nav-item nav-link">Добавить пост</a></li>	
 							<li><a href="{% url 'update' pk=user.id %}" class="nav-item nav-link">Изменить профиль</a></li>
-					
+							
 						</ul>
 					</nav>
 				</header>
@@ -39,14 +39,19 @@
 								<a href="#" class="logo"><img src="http://127.0.0.1:8000/media/{{user.avatar}}" alt="" /></a>
 								<header>
 									<h2>{{user.first_name}}</h2>
+									<h4>{{country}}, {{city}}</h4>
 									<p>{{user.email}}</a></p>
 								</header>
+								<!-- <div class="like">
+									<button>Like</button>
+									<span class="count">0</span>
+								  </div> -->
 							</section>
 
 						<!-- About -->
 						<section class="blurb">
 							<h2>Обо мне:</h2>
-							<h2>{{country}}, {{city}}</h2>
+							
 							<p>{{user.description}}</p>
 							
 						</section>
@@ -68,38 +73,30 @@
 							<article class="post">
 								<header>
 									<div class="title">
-										<h2><a href="#">${data.results[i].title} </a></h2>
+										<h2><a href="http://127.0.0.1:8000/single_post/${data.results[i].id}/${data.results[i].title}">${data.results[i].title} </a></h2>
 										<p></p>
 									</div>
 									<div class="meta">
 										<time class="published">${data.results[i].date_time} </time>
 									</div>
 								</header>
-								<a href="#" class="image featured"><img src="${data.results[i].image} " alt="" /></a>
+								<a href="http://127.0.0.1:8000/single_post/${data.results[i].id}/${data.results[i].title}" class="image featured"><img src="${data.results[i].image} " alt="" /></a>
 								<p></p>
 								<footer><ul class="actions">
 									${data.results[i].text}
 									<table>
 									
-										
-									
-										
 										<tr><td>
 										<ul id='post${data.results[i].id}'></ul></td></tr><tr><td>
 									
-									<li>	<form action="" method="POST" >
-	{% csrf_token %}
-	<table>
-		<tr><td>{{ form.as_p }}</td>
-			<td><input type="hidden" name="post_id" value="${data.results[i].id}"/></td>
-		<td><input type="submit" name="submit" value="Опубликовать"/></td></tr>
-	
-	</table>
-	
-</form></li></td></tr></table>
+									<li>	<form action="" method="POST" style="width:900px;" >
+												{% csrf_token %}{{ form.as_p }}<input type="hidden" name="post_id" value="${data.results[i].id}"/>
+												
+												
+											</form></li></td></tr></table>
 
-								</footer>
-							</article>
+											</footer>
+										</article>
 							
                             `
                             
@@ -133,8 +130,24 @@
                             
 						}  
                     })
+
+					// const likes = document.querySelectorAll('.like');
+
+					// likes.forEach((like) => {
+					// const button = like.querySelector('button');
+					// const count = like.querySelector('.count');
+
+					// let counter = parseInt(count.textContent);
+
+					// button.addEventListener('click', () => {
+					// 	like.classList.toggle('active');
+					// 	like.classList.contains('active') ? counter++ : counter--;
+					// 	count.textContent = counter;
+					// });
+					// });
+
                 });
+				
             </script>
-			
 
 			{% endblock %}
