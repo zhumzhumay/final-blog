@@ -92,23 +92,7 @@ class LikeDisLikeSerializer(serializers.ModelSerializer):
         model = LikeDislike
         fields = '__all__'
 
-    # def get_user_info(self, obj):
-    #     serializer = GetUserSerializer(obj.user)
-    #     return serializer.data
 
-
-    
-
-# class GetUserPostsSerializer(serializers.ModelSerializer):
-#     # user_id = serializers.SerializerMethodField()
-#     # user_avatar = serializers.SerializerMethodField()
-#     date_time = serializers.SerializerMethodField()
-#     class Meta:
-#         model = Post
-#         fields = '__all__'
-    
-#     def get_date_time(self, obj):
-#         return obj.date_post.strftime("%d/%m/%Y, %H:%M")
   
 
 class PostCommentsSerializer(serializers.ModelSerializer):

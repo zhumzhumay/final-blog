@@ -25,7 +25,7 @@ class RegisterForm(forms.ModelForm):
         }
 
 class SearchForm(forms.Form):
-    aiman = forms.CharField(label='')
+    aiman = forms.CharField(label='', required=False)
 
 class CommentForm(forms.ModelForm):
     class Meta:

@@ -27,25 +27,27 @@
 				<!-- Sidebar -->
 					<section id="sidebar">
 						<form action="" method="POST" >
-							{% csrf_token %}{{ form.as_p }}<input type="submit" name="submit" value="Найти" placeholder="Поиск"/>
-							<!-- <table>
-								<tr><td></td>
-								<td></td>
-									
-									</tr>
-							</table> -->
-							
-						</form>
-							
-					<form action="" method="GET" >
-							{% csrf_token %}{{ sortform.as_p }}<input type="submit" name="submit" value="Сортировать" placeholder="Поиск"/>
+							{% csrf_token %}{{ form.as_p }} 
+								 <input type="submit" name="submit" value="Найти" placeholder="Поиск"/>
+								
+							<div>
+							<p>  </p>
 						
+							{% csrf_token %}{{ sortform.as_p }}<input type="submit" name="submit" value="Сортировать" placeholder="Поиск"/>
+						</div>
 						</form>
 						<!-- Posts List -->
 							<section>
 								<ul class="posts minipost">
 									
 								</ul>
+								<div style="text-align: center; width: 400px;">
+									<p>реклама</p>
+									<a href="{{siteurl}}"><marquee behavior="alternate" direction="left"><h3>{{title}}</h3></marquee></a>
+									<a href="{{siteurl}}"><img src="http://127.0.0.1:8000/media/{{img}}" alt="" style="height: 600px; width: 400px;"/></a>
+									<a href="{{siteurl}}"><marquee behavior="alternate" direction="left"><h3>{{title}}</h3></marquee></a>
+									<p>реклама</p>
+								</div>
 							</section>
 
 					

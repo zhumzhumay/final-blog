@@ -2,8 +2,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin, AbstractBaseUser
 from django.db import models
 from django.utils import timezone
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 
 from blog.managers import UserManager
 
@@ -50,16 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         else:
             return ''
 
-
-
-
 class Post(models.Model):
-    # URGENT, BESTOFTHEDAY, REGULAR = range(1, 4)
-    # NEWS_TYPES = (
-    #     (URGENT, 'СРОЧНАЯ НОВОСТЬ'),
-    #     (BESTOFTHEDAY, 'НОВОСТЬ ДНЯ'),
-    #     (REGULAR, 'ОБЫЧНАЯ')
-    # )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='posts',
                              default=0)
@@ -68,8 +57,6 @@ class Post(models.Model):
     title = models.CharField(max_length=255, default='', null=True, blank=True, verbose_name='Заголовок')
     text = models.TextField(verbose_name="Текст", default='')
     date_post = models.DateTimeField(default=timezone.now, verbose_name="Дата")
-    
-    # votes = GenericRelation(LikeDislike, related_query_name='comments')
 
     class Meta:
         verbose_name = 'Пост'
@@ -104,7 +91,7 @@ class PostSort(models.Model):
     )
 
 
-    items = models.CharField('Сортировать', choices=CHOICES, default='-date_post', max_length=100)
+    items = models.CharField('', choices=CHOICES, default='-date_post', max_length=100)
 
 class LikeDislike(models.Model):
     LIKE = 1
@@ -120,10 +107,22 @@ class LikeDislike(models.Model):
     
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE, default=0, related_name='likes')
     
- 
-#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-#     object_id = models.PositiveIntegerField()
-#     content_object = GenericForeignKey()
- 
-#     objects = LikeDislikeManager()
+class Advertising(models.Model):
+    
+    image = models.ImageField('Изображение', default='static/img/service-6.jpg')
+    title = models.CharField(max_length=255, default='', null=True, blank=True, verbose_name='Заголовок')
+    url = models.CharField(max_length=255, default='', null=True, blank=True, verbose_name='Ссылка')
+    company = models.CharField(max_length=255, default='', null=True, blank=True, verbose_name='Организация')
+    date_post = models.DateTimeField(default=timezone.now, verbose_name="Дата")
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name='Статус',
+    )
+
+    class Meta:
+        verbose_name = 'Реклама'
+        verbose_name_plural = 'Реклама'
+
+    def __str__(self):
+        return self.company
 

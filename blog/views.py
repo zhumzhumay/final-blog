@@ -1,25 +1,20 @@
-import json
-from django.views import View
-import django_filters.rest_framework
+
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
-from rest_framework import status, mixins, filters
-from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
-from rest_framework.response import Response
-from django.views.generic import CreateView, UpdateView, DeleteView
+from rest_framework import  mixins, filters
+from rest_framework.permissions import AllowAny
+from django.views.generic import UpdateView, DeleteView
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework_simplejwt.views import TokenObtainSlidingView, TokenRefreshSlidingView
 
 from blog.forms import PostForm, LoginForm, RegisterForm, SearchForm, CommentForm, WikiForm, SortForm
-from blog.models import User, Post, Comment, LikeDislike
-# from blog.permissions import IsSuperAdmin, IsReader
+from blog.models import User, Post, Comment, LikeDislike, Advertising
 from blog.serializers import UserSerializer, TokenObtainPairSerializer, TokenRefreshSerializer, PostSerializer,\
 PostCommentsSerializer, LikeDisLikeSerializer
 
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 import geoip2.database, wikipediaapi
 from django.contrib.contenttypes.models import ContentType
 
@@ -103,8 +98,7 @@ class UserDeleteView(DeleteView):
 
 
 def index(request):
-    # submitbutton= request.POST.get("submit")
-    sortform = SortForm(request.GET or None)
+    sortform = SortForm(request.POST or None)
     form = SearchForm(request.POST or None)
     sort = '-date_post'
     aiman = ''
@@ -113,8 +107,21 @@ def index(request):
     if form.is_valid():
         aiman = form.cleaned_data.get("aiman")
        
-        
-    return render(request, 'index.html',{'form':form, 'sort':sort, 'sortform':sortform, 'aiman':aiman,})
+    queryset = Advertising.objects.get(is_active=True)
+    siteurl = queryset.url
+    title = queryset.title
+    img = queryset.image
+    # return render(request, 'index.html',{'sort':sort, 'sortform':sortform,})
+    context = {
+        'form':form,
+        'sort':sort,
+        'sortform':sortform,
+        'aiman':aiman,
+        'siteurl':siteurl,
+        'title':title,
+        'img':img,
+    }
+    return render(request, 'index.html', context)
         
 def wiki(request):
     submitbutton= request.POST.get("submit")
@@ -224,8 +231,7 @@ def profile(request, username):
 
     return render(request, 'profile.html', {'username':username, 'country':country, 'city':city, 'form':form})
 
-# def ttest(request):
-#     return render(request, 'ttest.html')
+
 
 
 def single_post(request,title, pk):
@@ -242,33 +248,3 @@ def single_post(request,title, pk):
     else:
         form = CommentForm(initial={'body':None})
     return render(request, 'single_post.html', {'title':title, 'pk':pk, 'form':form})
-
-# class VotesView(View):
-#     model = None    # Модель данных - Статьи или Комментарии
-#     vote_type = None # Тип комментария Like/Dislike
- 
-#     def post(self, request, pk):
-#         obj = self.model.objects.get(pk=pk)
-#         # GenericForeignKey не поддерживает метод get_or_create
-#         try:
-#             likedislike = LikeDislike.objects.get(content_type=ContentType.objects.get_for_model(obj), object_id=obj.id, user=request.user)
-#             if likedislike.vote is not self.vote_type:
-#                 likedislike.vote = self.vote_type
-#                 likedislike.save(update_fields=['vote'])
-#                 result = True
-#             else:
-#                 likedislike.delete()
-#                 result = False
-#         except LikeDislike.DoesNotExist:
-#             obj.votes.create(user=request.user, vote=self.vote_type)
-#             result = True
- 
-#         return HttpResponse(
-#             json.dumps({
-#                 "result": result,
-#                 "like_count": obj.votes.likes().count(),
-#                 "dislike_count": obj.votes.dislikes().count(),
-#                 "sum_rating": obj.votes.sum_rating()
-#             }),
-#             content_type="application/json"
-#         )
