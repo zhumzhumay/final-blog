@@ -13,10 +13,10 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework_simplejwt.views import TokenObtainSlidingView, TokenRefreshSlidingView
 
 from blog.forms import PostForm, LoginForm, RegisterForm, SearchForm, CommentForm, WikiForm, SortForm
-from blog.models import User, Post, Comment
+from blog.models import User, Post, Comment, LikeDislike
 # from blog.permissions import IsSuperAdmin, IsReader
 from blog.serializers import UserSerializer, TokenObtainPairSerializer, TokenRefreshSerializer, PostSerializer,\
-GetUserPostsSerializer, GetPostCommentsSerializer
+PostCommentsSerializer, LikeDisLikeSerializer
 
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
@@ -31,7 +31,7 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
 
 class GetUserPostsView(GenericViewSet ,mixins.ListModelMixin):
-    serializer_class = GetUserPostsSerializer
+    serializer_class = PostSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
@@ -40,7 +40,7 @@ class GetUserPostsView(GenericViewSet ,mixins.ListModelMixin):
         return Post.objects.filter(user=user).order_by('-date_post')
     
 class GetPostCommentsView(GenericViewSet ,mixins.ListModelMixin):
-    serializer_class = GetPostCommentsSerializer
+    serializer_class = PostCommentsSerializer
     permission_classes = [AllowAny]
 
     def get_queryset(self):
@@ -66,10 +66,30 @@ class PostViewSet(ModelViewSet):
     search_fields = ['title', 'text', 'user__username', 'user__first_name'] #user_info.username
     ordering_fields = ['date_post']
 
-    # def get_queryset(self):
+
+class LikeDisLikeViewSet(ModelViewSet):
+    serializer_class = LikeDisLikeSerializer
+    permission_classes = [AllowAny]
+    queryset = LikeDislike.objects.all()
+    
+class GetLikeDisLikeView(GenericViewSet ,mixins.ListModelMixin):
+    serializer_class = LikeDisLikeSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self):
         
-    #     ord = self.kwargs['order']
-    #     return Post.objects.all().order_by(ord)
+        user = self.kwargs['userpk']
+        post = self.kwargs['postpk']
+        queryset = LikeDislike.objects.filter(user=user, post=post)
+        # if queryset.count()==0:
+        #     return Null
+        # else:
+        #     return queryset
+        return queryset
+
+
+    
+
 
 class UserUpdateView(UpdateView):
     model = User

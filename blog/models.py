@@ -50,23 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         else:
             return ''
 
-# class LikeDislike(models.Model):
-#     LIKE = 1
-#     DISLIKE = -1
- 
-#     VOTES = (
-#         (DISLIKE, 'Не нравится'),
-#         (LIKE, 'Нравится')
-#     )
- 
-#     vote = models.SmallIntegerField(verbose_name="Голос", choices=VOTES)
-#     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
- 
-#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-#     object_id = models.PositiveIntegerField()
-#     content_object = GenericForeignKey()
- 
-#     objects = LikeDislikeManager()
+
 
 
 class Post(models.Model):
@@ -84,6 +68,7 @@ class Post(models.Model):
     title = models.CharField(max_length=255, default='', null=True, blank=True, verbose_name='Заголовок')
     text = models.TextField(verbose_name="Текст", default='')
     date_post = models.DateTimeField(default=timezone.now, verbose_name="Дата")
+    
     # votes = GenericRelation(LikeDislike, related_query_name='comments')
 
     class Meta:
@@ -100,8 +85,8 @@ class Post(models.Model):
             return ''
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Пост')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Пост', related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор', related_name='comments')
     body = models.TextField('Комментарий', max_length=255)
     date_comment = models.DateTimeField(default=timezone.now, verbose_name="Дата")
     
@@ -120,4 +105,25 @@ class PostSort(models.Model):
 
 
     items = models.CharField('Сортировать', choices=CHOICES, default='-date_post', max_length=100)
+
+class LikeDislike(models.Model):
+    LIKE = 1
+    DISLIKE = -1
+ 
+    VOTES = (
+        (DISLIKE, 'Не нравится'),
+        (LIKE, 'Нравится')
+    )
+    
+    post = models.ForeignKey(Post, verbose_name="Пост", on_delete=models.CASCADE, default=0, related_name='likes')
+    vote = models.SmallIntegerField(verbose_name="Голос", choices=VOTES)
+    
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE, default=0, related_name='likes')
+    
+ 
+#     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+#     object_id = models.PositiveIntegerField()
+#     content_object = GenericForeignKey()
+ 
+#     objects = LikeDislikeManager()
 

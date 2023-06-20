@@ -4,13 +4,13 @@ from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User, Post, Comment
+from .models import User, Post, Comment, LikeDislike
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'role', 'id']
+        fields = ['username', 'role', 'id', 'password']
 
 
 class TokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -84,19 +84,34 @@ class PostSerializer(serializers.ModelSerializer):
     def get_date_time(self, obj):
         return obj.date_post.strftime("%d/%m/%Y, %H:%M")
     
+class LikeDisLikeSerializer(serializers.ModelSerializer):
+    # user_info = serializers.SerializerMethodField()
+    # post_info = serializers.SerializerMethodField()
 
-class GetUserPostsSerializer(serializers.ModelSerializer):
-    # user_id = serializers.SerializerMethodField()
-    # user_avatar = serializers.SerializerMethodField()
-    date_time = serializers.SerializerMethodField()
     class Meta:
-        model = Post
+        model = LikeDislike
         fields = '__all__'
-    
-    def get_date_time(self, obj):
-        return obj.date_post.strftime("%d/%m/%Y, %H:%M")
 
-class GetPostCommentsSerializer(serializers.ModelSerializer):
+    # def get_user_info(self, obj):
+    #     serializer = GetUserSerializer(obj.user)
+    #     return serializer.data
+
+
+    
+
+# class GetUserPostsSerializer(serializers.ModelSerializer):
+#     # user_id = serializers.SerializerMethodField()
+#     # user_avatar = serializers.SerializerMethodField()
+#     date_time = serializers.SerializerMethodField()
+#     class Meta:
+#         model = Post
+#         fields = '__all__'
+    
+#     def get_date_time(self, obj):
+#         return obj.date_post.strftime("%d/%m/%Y, %H:%M")
+  
+
+class PostCommentsSerializer(serializers.ModelSerializer):
     # user_id = serializers.SerializerMethodField()
     user_info = serializers.SerializerMethodField()
     date_time = serializers.SerializerMethodField()

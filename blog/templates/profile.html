@@ -42,10 +42,7 @@
 									<h4>{{country}}, {{city}}</h4>
 									<p>{{user.email}}</a></p>
 								</header>
-								<!-- <div class="like">
-									<button>Like</button>
-									<span class="count">0</span>
-								  </div> -->
+								
 							</section>
 
 						<!-- About -->
@@ -96,6 +93,10 @@
 											</form></li></td></tr></table>
 
 											</footer>
+						<div class="like">
+						<button class='button' id='button${data.results[i].id}'>Like</button>
+						<span class="count">0</span>
+						</div> 
 										</article>
 							
                             `
@@ -103,7 +104,7 @@
 									
 									
 							document.querySelector('.mainpost').append(maindiv);
-							let post_id=data.results[i].id;
+							const post_id=data.results[i].id;
 							$.get(`http://127.0.0.1:8000/${post_id}/getpostcomment/`, function(data, status){
 							for(let i=0;i<(data.count);i++){
 								let minili = document.createElement('div');
@@ -123,14 +124,57 @@
 										`
 								document.querySelector(`#post${post_id}`).append(minili)
 								
-							}  
-						})
+										}  
+									});
 					
                 
-                            
-						}  
-                    })
+					  
+						
+						$(`#button${post_id}`).click(function(){
+							console.log('click')
+						$.get(`http://127.0.0.1:8000/getlike/${post_id}/{{user.id}}`, function(data, status){
+							const votes=data.count;
+							console.log(`${post_id} id. ${data.count} c. {{user.id}} user`);
+							
+							
+							if(votes>=1){
+								for(let i=0;i<(data.count);i++){
+								let vote_id = data.results[i].id;
+								console.log(vote_id)
+							
+								console.log(`if `)
+								var settings = {
+								"url": `http://127.0.0.1:8000/api/like/${vote_id}/`,
+								"method": "DELETE",
+								"timeout": 0,
+								"headers": {
+									"accept": "application/json",
+									"Accept-Language": "ru"
+								},
+								};
 
+								$.ajax(settings).done(function (response) {
+								console.log(response);
+								});}
+								}
+								else{
+									console.log("в элсе")
+									$.post('http://127.0.0.1:8000/api/like/',{
+										vote: 1,
+										post: post_id,
+										user: '{{user.id}}'
+									})
+								};
+								console.log("конец");
+							});
+							
+						
+
+								
+							
+						 
+                    })
+				};  
 					// const likes = document.querySelectorAll('.like');
 
 					// likes.forEach((like) => {
@@ -144,7 +188,7 @@
 					// 	like.classList.contains('active') ? counter++ : counter--;
 					// 	count.textContent = counter;
 					// });
-					// });
+					});
 
                 });
 				

@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from blog.views import UserViewSet, TokenObtainPairView, \
     TokenRefreshView, index, PostViewSet, signin, post_form, error, profile,\
           register_form, UserUpdateView, UserDeleteView, GetUserPostsView,\
-            GetPostCommentsView, wiki, single_post#, PostCreateView
+            GetPostCommentsView, wiki, single_post, LikeDisLikeViewSet, GetLikeDisLikeView
 
 from django.conf.urls.static import static
 from django.conf import settings
@@ -14,6 +14,7 @@ from .models import Comment
 router = DefaultRouter()
 router.register('user', UserViewSet, basename="user")
 router.register('post', PostViewSet, basename='post')
+router.register('like', LikeDisLikeViewSet, basename='like')
 
 urlpatterns = [
     path('api/', include(router.urls)),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('<pk>/delete/', UserDeleteView.as_view(), name='delete'),
     path('<fk>/getuserpost/', GetUserPostsView.as_view({'get':'list'})),
     path('<post>/getpostcomment/', GetPostCommentsView.as_view({'get':'list'})),
+    path('getlike/<postpk>/<userpk>', GetLikeDisLikeView.as_view({'get':'list'})),
     path('token/', TokenObtainPairView.as_view()),
     path('token/refresh/', TokenRefreshView.as_view()),
 
