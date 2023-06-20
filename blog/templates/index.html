@@ -80,13 +80,19 @@
 									<footer>
 										<ul class="actions">
 											<li>${data.results[i].text}</li>
+
+											<div class="like">
+							
+							<span id='button${data.results[i].id}'></span>
+								
+							<span id="count${data.results[i].id}"></span>
+							</div> 
 											<table>
 									
-										
-									
+					
 										
 									<tr><td>
-									<ul id='post${data.results[i].id}'></ul></td></tr><tr><td>
+									<ul id='post${data.results[i].id}'></ul></td></tr>
 								
 								</table>
 										
@@ -107,7 +113,7 @@
 								document.querySelector('.mainpost').append(maindiv)
 								document.querySelector('.minipost').append(minili)
 								
-								let post_id=data.results[i].id;
+								const post_id=data.results[i].id;
 							$.get(`http://127.0.0.1:8000/${post_id}/getpostcomment/`, function(data, status){
 							for(let i=0;i<(data.count);i++){
 								let minili = document.createElement('div');
@@ -129,9 +135,145 @@
 								
 							}  
 						})
+//----------------------------------
+
+
+$.get(`http://127.0.0.1:8000/getlike/${post_id}/None`, function(data, status){
+									var alllikes=data.count;
+									console.log(`none begun count ${alllikes}`);
+                
+								$.get(`http://127.0.0.1:8000/getlike/${post_id}/{{user.id}}`, function(data, status){
+								const votes=data.count;
+								const ndata=data;
+								
+									
+								let likecount = document.createElement('div');
+								likecount.className = `count${post_id}`;
+								likecount.setAttribute("id", `count${post_id}`);
+								likecount.innerHTML=`${alllikes}`;
+								console.log(`befor creating count ${alllikes}`);
+								document.querySelector(`#count${post_id}`).append(likecount);
+								
+								const likef = document.createElement('span');
+								likef.className = `span${post_id}`;
+								likef.setAttribute("id", `span${post_id}`);
+								if(votes>=1){
+									console.log(`if span${votes}`);
+								// let likef = document.createElement('span');
+	
+								likef.innerHTML=`
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+									<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+								  </svg>
+										`
+								// document.querySelector(`#button${post_id}`).append(likef);
+
+									}
+									else{
+										console.log(`else span ${votes}`);
+										// let likef = document.createElement('span');
+
+	
+								likef.innerHTML=`
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+									<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+								  </svg>
+										`
+								// document.querySelector(`#button${post_id}`).append(likef)
+									};
+									document.querySelector(`#button${post_id}`).append(likef);
+								$(`#button${post_id}`).click(function(){
+								console.log(`click ${votes}`);
+								$.get(`http://127.0.0.1:8000/getlike/${post_id}/{{user.id}}`, function(data, status){
+								const votes=data.count;
+								const ndata=data;
+								// console.log(`click2 ${alllikes}`);
+
+								if(votes>=1){
+								for(let i=0;i<(data.count);i++){
+								let vote_id = ndata.results[i].id;
+								console.log(vote_id)
+							
+								console.log(`if `)
+								var settings = {
+								"url": `http://127.0.0.1:8000/api/like/${vote_id}/`,
+								"method": "DELETE",
+								"timeout": 0,
+								"headers": {
+									"accept": "application/json",
+									"Accept-Language": "ru"
+								},
+								};
+								$.ajax(settings).done(function (response) {
+								console.log(response);
+								});};
+								const votes=0;
+								
+								let old = document.querySelector(`.count${post_id}`);
+								let likecount = document.createElement('div');
+								likecount.className = `count${post_id}`;
+								
+								likecount.setAttribute("id", `count${post_id}`);
+
+								likecount.innerHTML = `${Number(old.innerText)-1}`;
+								old.replaceWith(likecount);
+
+								let old1 = document.querySelector(`.span${post_id}`);
+								let likef = document.createElement('span');
+								likef.className = `span${post_id}`;
+								likef.setAttribute("id", `span${post_id}`);
+								likef.innerHTML=`
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+									<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+								  </svg>
+										`
+								old1.replaceWith(likef);
 
 
 
+
+
+								}
+								else{
+									console.log(`else allikes ${alllikes}`);
+									$.post('http://127.0.0.1:8000/api/like/',{
+										vote: 1,
+										post: post_id,
+										user: '{{user.id}}'
+									});
+								
+									const votes=1;
+								let old = document.querySelector(`.count${post_id}`);
+								let likecount = document.createElement('div');
+								likecount.className = `count${post_id}`;
+								
+								likecount.innerHTML = `${Number(old.innerText)+1}`;
+								old.replaceWith(likecount);
+
+
+								let old1 = document.querySelector(`.span${post_id}`);
+								let likef = document.createElement('span');
+								likef.className = `span${post_id}`;
+								likef.setAttribute("id", `span${post_id}`);
+								likef.innerHTML=`
+								<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+									<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+								  </svg>
+										`
+								old1.replaceWith(likef);
+								};
+								console.log("конец");
+								
+						 
+                    })
+				});
+				});
+
+
+							});	
+
+
+//-----------------
 							}  
 						})
 					

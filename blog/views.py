@@ -80,11 +80,11 @@ class GetLikeDisLikeView(GenericViewSet ,mixins.ListModelMixin):
         
         user = self.kwargs['userpk']
         post = self.kwargs['postpk']
-        queryset = LikeDislike.objects.filter(user=user, post=post)
-        # if queryset.count()==0:
-        #     return Null
-        # else:
-        #     return queryset
+        if user=='None':
+            queryset = LikeDislike.objects.filter(post=post)
+        else:
+            queryset = LikeDislike.objects.filter(user=user, post=post)
+        
         return queryset
 
 
