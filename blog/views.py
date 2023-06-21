@@ -199,15 +199,20 @@ def register_form(request):
 
 
 def profile(request, username):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    with geoip2.database.Reader('geoip/GeoLite2-City.mmdb') as reader:
-        response = reader.city('5.34.91.6')
-    country = response.country.names['ru']
-    city = response.city.names['ru']
+    queryset = User.objects.get(username=username)
+    q = User.objects.filter(username=username)
+    if username==request.user.username:
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        with geoip2.database.Reader('geoip/GeoLite2-City.mmdb') as reader:
+            response = reader.city('5.34.91.6')
+        country = response.country.names['ru']
+        city = response.city.names['ru']
+        q.update(city=city, country=country)
+    
 
     
     if request.method == "POST":
@@ -223,23 +228,10 @@ def profile(request, username):
     else:
         form = CommentForm(initial={'body':None})
 
-    if username:
-        q = User.objects.get(username=username)
+    
+
         
-        # id = q.id
-        # first_name = q.first_name
-        # email = q.email
-        # ava = q.avatar
-        # desc = q.description
-        # user={
-        #     'id':id,
-        #     'avatar':ava,
-        #     'email':email,
-        #     'username':username,
-        #     'first_name':first_name,
-        #     'description':desc
-        # }
-    return render(request, 'profile.html', {'username':q, 'country':country, 'city':city, 'form':form})
+    return render(request, 'profile.html', {'username':queryset, 'country':queryset.country, 'city':queryset.city, 'form':form})
 
 
 

@@ -22,6 +22,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField("Почта", default="email@mail.com", blank=True, null=True)
     description = models.TextField('Обо мне', default='')
     date_joined = models.DateTimeField("Дата присоединения", blank=True, null=True, default=timezone.now)
+    country = models.CharField('Страна', default='',max_length=100)
+    city = models.CharField('Город', default='', max_length=100)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(
         default=True,
