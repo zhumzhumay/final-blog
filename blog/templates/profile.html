@@ -28,26 +28,26 @@
 					</div>
 
 				<!-- Sidebar -->
-					<section id="sidebar">
+					<section id="sidebar" style="text-align: right;">
 
 						<!-- Intro -->
 							<section id="intro">
 								<a href="#" class="logo"><img src="http://127.0.0.1:8000/media/{{username.avatar}}" alt="" /></a>
 								<header>
-									<h2>{{username.first_name}}</h2>
-									<h4><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+									<h3>{{username.first_name}}</h3>
+									<h4>{{country}}, {{city}}<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
 										<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-									  </svg> {{country}}, {{city}}</h4>
-									<p><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-open" viewBox="0 0 16 16">
+									  </svg> </h4>
+									<p>{{username.email}}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-envelope-open" viewBox="0 0 16 16">
 										<path d="M8.47 1.318a1 1 0 0 0-.94 0l-6 3.2A1 1 0 0 0 1 5.4v.817l5.75 3.45L8 8.917l1.25.75L15 6.217V5.4a1 1 0 0 0-.53-.882l-6-3.2ZM15 7.383l-4.778 2.867L15 13.117V7.383Zm-.035 6.88L8 10.082l-6.965 4.18A1 1 0 0 0 2 15h12a1 1 0 0 0 .965-.738ZM1 13.116l4.778-2.867L1 7.383v5.734ZM7.059.435a2 2 0 0 1 1.882 0l6 3.2A2 2 0 0 1 16 5.4V14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5.4a2 2 0 0 1 1.059-1.765l6-3.2Z"/>
-									  </svg> {{username.email}}</a></p>
+									  </svg> </p>
 								</header>
 								
 							</section>
 
 						<!-- About -->
 						<section class="blurb">
-							<h2>Обо мне:</h2>
+							<h3>Обо мне:</h3>
 							
 							<p>{{username.description}}</p>
 							
@@ -56,6 +56,7 @@
 					</section>
 
 				</div>
+			
 		
 			<script>
 
@@ -118,7 +119,7 @@
 													<tr>
 														<td><h5><a href="#">${data.results[i].body}</a></h5></td>
 														<td><tr><time class="published">${data.results[i].date_time} от </time></tr>
-															<tr><a href="#" >${data.results[i].user_info.first_name}</a></tr></td>
+															<tr><a href="http://127.0.0.1:8000/${data.results[i].user_info.username}/profile/">${data.results[i].user_info.first_name}</a></tr></td>
 														</tr>
 												
 											</article>
