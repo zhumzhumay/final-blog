@@ -223,8 +223,23 @@ def profile(request, username):
     else:
         form = CommentForm(initial={'body':None})
 
-
-    return render(request, 'profile.html', {'username':username, 'country':country, 'city':city, 'form':form})
+    if username:
+        q = User.objects.get(username=username)
+        
+        # id = q.id
+        # first_name = q.first_name
+        # email = q.email
+        # ava = q.avatar
+        # desc = q.description
+        # user={
+        #     'id':id,
+        #     'avatar':ava,
+        #     'email':email,
+        #     'username':username,
+        #     'first_name':first_name,
+        #     'description':desc
+        # }
+    return render(request, 'profile.html', {'username':q, 'country':country, 'city':city, 'form':form})
 
 
 
