@@ -7,12 +7,16 @@
 					
 					<h1><a href="{% url 'index' %}">BLOG</a></h1>
 					
+					
 					<nav class="links">
 						<ul>
-						
+{% if user.is_authenticated %}
 							<li><a href="{% url 'post_add' %}" class="nav-item nav-link">Добавить пост</a></li>	
 							<li><a href="{% url 'update' pk=user.id %}" class="nav-item nav-link">Изменить профиль</a></li>
-							
+							{% else %}
+							<li><a href="{% url 'signin' %}">Авторизация/регистрация</a></li>
+								<li><a href="{% url 'wiki' %}">WIKI</a></li>
+								{% endif %}
 						</ul>
 					</nav>
 				</header>
@@ -82,6 +86,12 @@
 								<p></p>
 								<footer><ul class="actions">
 									${data.results[i].text}
+									<div class="like">
+							
+							<span id='button${data.results[i].id}'></span>
+								
+							<span id="count${data.results[i].id}"></span>
+							</div> 
 									<table>
 									
 										<tr><td>
@@ -94,12 +104,7 @@
 											</form></li></td></tr></table>
 
 											</footer>
-						<div class="like">
-							
-						<span id='button${data.results[i].id}'></span>
-							
-						<span id="count${data.results[i].id}"></span>
-						</div> 
+						
 										</article>
 							
                             `

@@ -51,7 +51,7 @@
 			<script>
 
                 $(document).ready(function(){
-						$.get(`http://127.0.0.1:8000/api/post/?search={{aiman}}&ordering={{sort}}`, function(data, status){
+						$.get(`http://127.0.0.1:8000/api/post/?search={{searchfield}}&ordering={{sort}}`, function(data, status){
 							if(data.count==0){let maindiv = document.createElement('div');
 								maindiv.className="post";
 			

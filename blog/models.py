@@ -20,7 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField("ФИО", max_length=100, default='', blank=True, null=True)
     avatar = models.ImageField('Аватарка', default='ava-default.png')
     email = models.EmailField("Почта", default="email@mail.com", blank=True, null=True)
-    description = models.TextField('Обо мне', default='')
+    description = models.TextField('Обо мне', default='', null=True, blank=True)
     date_joined = models.DateTimeField("Дата присоединения", blank=True, null=True, default=timezone.now)
     country = models.CharField('Страна', default='',max_length=100)
     city = models.CharField('Город', default='', max_length=100)

@@ -99,13 +99,13 @@ def index(request):
     form = SearchForm(request.POST or None)
     takeoff= request.POST.get("takeoff")
     sort = '-date_post'
-    aiman = ''
+    searchfield = ''
     if sortform.is_valid():
         sort = sortform.cleaned_data.get('items')
     
     if takeoff==None:
         if form.is_valid():
-            aiman = form.cleaned_data.get("aiman")
+            searchfield = form.cleaned_data.get("searchfield")
     else:
         return HttpResponseRedirect(request.path) 
     queryset = Advertising.objects.get(is_active=True)
@@ -116,7 +116,7 @@ def index(request):
         'form':form,
         'sort':sort,
         'sortform':sortform,
-        'aiman':aiman,
+        'searchfield':searchfield,
         'siteurl':siteurl,
         'title':title,
         'img':img,
