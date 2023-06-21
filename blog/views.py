@@ -83,9 +83,6 @@ class GetLikeDisLikeView(GenericViewSet ,mixins.ListModelMixin):
         return queryset
 
 
-    
-
-
 class UserUpdateView(UpdateView):
     model = User
     fields = ['first_name', 'email','avatar', 'description']
@@ -100,18 +97,21 @@ class UserDeleteView(DeleteView):
 def index(request):
     sortform = SortForm(request.POST or None)
     form = SearchForm(request.POST or None)
+    takeoff= request.POST.get("takeoff")
     sort = '-date_post'
     aiman = ''
     if sortform.is_valid():
         sort = sortform.cleaned_data.get('items')
-    if form.is_valid():
-        aiman = form.cleaned_data.get("aiman")
-       
+    
+    if takeoff==None:
+        if form.is_valid():
+            aiman = form.cleaned_data.get("aiman")
+    else:
+        return HttpResponseRedirect(request.path) 
     queryset = Advertising.objects.get(is_active=True)
     siteurl = queryset.url
     title = queryset.title
     img = queryset.image
-    # return render(request, 'index.html',{'sort':sort, 'sortform':sortform,})
     context = {
         'form':form,
         'sort':sort,
@@ -120,6 +120,7 @@ def index(request):
         'siteurl':siteurl,
         'title':title,
         'img':img,
+        'takeoff':takeoff,
     }
     return render(request, 'index.html', context)
         
@@ -160,17 +161,12 @@ def signin(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            # if user.role == User.ROLE_TYPES[0][0]:
             return redirect('profile', user.username)
-            # else:
-            #     return redirect('index')
         else:
-            # Return an 'invalid login' error message.
             return redirect('error')
     else:
         form = LoginForm()
 
-        # Redirect to a success page.
 
     return render(request, 'signin.html', {'form': form})
 
@@ -183,7 +179,6 @@ def post_form(request):
             post.user = request.user
             post.post_date = timezone.now()
             post.save()
-            # img_obj = form.instance
             return redirect('profile', request.user.username)
     else:
         form = PostForm()

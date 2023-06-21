@@ -14,13 +14,6 @@
 						<!-- Post -->
 						<div class="mainpost" ></div>
 						
-					
-
-						<!-- Pagination -->
-						<ul class="actions pagination">
-							<li><a href="" class="disabled button big previous">Previous Page</a></li>
-							<li><a href="#" class="button big next">Next Page</a></li>
-						</ul>
 
 					</div>
 
@@ -29,9 +22,8 @@
 						<form action="" method="POST" >
 							{% csrf_token %}{{ form.as_p }} 
 								 <input type="submit" name="submit" value="Найти" placeholder="Поиск"/>
-								
+								 <input type="submit" name="takeoff" value="Сбросить" placeholder="Поиск"/>
 							<div>
-							<p>  </p>
 						
 							{% csrf_token %}{{ sortform.as_p }}<input type="submit" name="submit" value="Сортировать" placeholder="Поиск"/>
 						</div>
@@ -59,6 +51,15 @@
 
                 $(document).ready(function(){
 						$.get(`http://127.0.0.1:8000/api/post/?search={{aiman}}&ordering={{sort}}`, function(data, status){
+							if(data.count==0){let maindiv = document.createElement('div');
+								maindiv.className="post";
+			
+								maindiv.innerHTML=`
+								<article class="post">
+											<h5 style="text-align: center;">По вашему запросу ничего не найдено</h5>
+										</article>`
+								document.querySelector('.mainpost').append(maindiv)}
+							else{
 							for(let i=0;i<(data.count);i++){
 								let maindiv = document.createElement('div');
 								let minili = document.createElement('li');
@@ -232,9 +233,6 @@ $.get(`http://127.0.0.1:8000/getlike/${post_id}/None`, function(data, status){
 								old1.replaceWith(likef);
 
 
-
-
-
 								}
 								else{
 									console.log(`else allikes ${alllikes}`);
@@ -276,7 +274,8 @@ $.get(`http://127.0.0.1:8000/getlike/${post_id}/None`, function(data, status){
 
 
 //-----------------
-							}  
+							}
+						}  
 						})
 					
                 });

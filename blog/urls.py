@@ -25,7 +25,6 @@ urlpatterns = [
     path('signin/', signin, name='signin'),
     path('register/', register_form, name='register'),
     path('<username>/profile/',profile, name='profile'),
-    # path('ttest/',ttest, name='ttest'),
     path('single_post/<pk>/<title>', single_post, name='single_post'),
     path('<pk>/update/', UserUpdateView.as_view(), name='update'),
     path('<pk>/delete/', UserDeleteView.as_view(), name='delete'),
@@ -35,16 +34,4 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view()),
     path('token/refresh/', TokenRefreshView.as_view()),
 
-
-
-
-    # path(r'^article/(?P<pk>\d+)/like/$',
-    #     VotesView.as_view(model=Comment, vote_type=LikeDislike.LIKE),
-    #     name='article_like'),
-    # path(r'^article/(?P<pk>\d+)/dislike/$',VotesView.as_view(model=Comment, vote_type=LikeDislike.DISLIKE),
-    #     name='article_dislike'),
-    # path(r'^comment/(?P<pk>\d+)/like/$',VotesView.as_view(model=Comment, vote_type=LikeDislike.LIKE),
-    #     name='comment_like'),
-    # path(r'^comment/(?P<pk>\d+)/dislike/$',VotesView.as_view(model=Comment, vote_type=LikeDislike.DISLIKE),
-    #     name='comment_dislike'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -52,7 +52,6 @@
                             `
                             
 									
-									
 							document.querySelector('.mainpost').append(maindiv);
 							const post_id=data.id;
 							$.get(`http://127.0.0.1:8000/${post_id}/getpostcomment/`, function(data, status){
@@ -168,10 +167,6 @@
 										`
 								old1.replaceWith(likef);
 
-
-
-
-
 								}
 								else{
 									console.log(`else allikes ${alllikes}`);
@@ -210,18 +205,10 @@
 
 
 							});	
-
-
-
 //--------------------------------
-							
-					
-                
-                            
+					    
 						
                     })
-
-					
 
                 });
 				

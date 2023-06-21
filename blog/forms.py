@@ -1,7 +1,6 @@
 from django import forms
 from .models import Post, User, Comment, PostSort
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -41,15 +40,3 @@ class SortForm(forms.ModelForm):
     class Meta:
         model = PostSort
         fields = ('items',)
-
-
-# class EditForm(forms.ModelForm):
-    # class Meta:
-    #     model = User
-    #     fields = ('email',)
-
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.helper = FormHelper()
-    #     self.helper.form_method = 'post'
-    #     self.helper.add_input(Submit('submit', 'Save'))

@@ -44,10 +44,6 @@ class TokenRefreshSerializer(TokenRefreshSerializer):
                 'detail': f"Пользователь был удалён!"
             }, code='user_does_not_exists')
 
-        if user.blocked:
-            raise AuthenticationFailed({
-                'detail': f"Пользователь {user.username} был заблокирован!"
-            }, code='user_deleted')
 
         data['id'] = user.id
         data['username'] = user.username
@@ -60,14 +56,10 @@ class GetUserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
         
-    # def get_post(self, obj):
-    #     serializer = GetUserSerializer(obj.postde)
-    #     return serializer.data
 
 
 class PostSerializer(serializers.ModelSerializer):
     user_info = serializers.SerializerMethodField()
-    # type_name = serializers.SerializerMethodField()
     date_time = serializers.SerializerMethodField()
 
     class Meta:
@@ -78,16 +70,10 @@ class PostSerializer(serializers.ModelSerializer):
         serializer = GetUserSerializer(obj.user)
         return serializer.data
 
-    # def get_type_name(self, obj):
-    #     return Post.NEWS_TYPES[int(obj.type) - 1][1]
-
     def get_date_time(self, obj):
         return obj.date_post.strftime("%d/%m/%Y, %H:%M")
     
 class LikeDisLikeSerializer(serializers.ModelSerializer):
-    # user_info = serializers.SerializerMethodField()
-    # post_info = serializers.SerializerMethodField()
-
     class Meta:
         model = LikeDislike
         fields = '__all__'
@@ -96,7 +82,6 @@ class LikeDisLikeSerializer(serializers.ModelSerializer):
   
 
 class PostCommentsSerializer(serializers.ModelSerializer):
-    # user_id = serializers.SerializerMethodField()
     user_info = serializers.SerializerMethodField()
     date_time = serializers.SerializerMethodField()
     class Meta:
