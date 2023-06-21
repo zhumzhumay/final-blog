@@ -15,9 +15,10 @@
         </ul>
     </nav>
 </header>
-<section id="sidebar">
+<section style="text-align: center;">
 
     <!-- Intro -->
+    <section>
         <section id="intro">
             <a href="#" class="logo"><img src="http://127.0.0.1:8000/media/{{user.avatar}}" alt="" /></a>
             <header>
@@ -33,18 +34,18 @@
         <div><a href="{% url 'delete' pk=user.id%}"  class="button big">Удалить профиль</a></div>
     </section>
 
-</section>
-
-<article class="post"  style="margin-right: auto;">
+</section></section>
+<!-- <div style=" margin: auto 0;"> -->
+<article class="post"  style="margin: auto;width: 1000px;">
    <form action="" method="post" style="margin: auto 0;" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
-    {{ form.as_table }}
+    {{ form.as_p }}
     </table>
     <input type="submit" value="Сохранить изменения" />
 
 </form> 
 </article>
-
+<!-- </div> -->
 
 {% endblock %}

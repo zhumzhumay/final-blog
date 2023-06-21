@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1 style="text-align: center;">Новый пост</h1>
-<article class="post">
+<article class="post" class="post"  style="margin: auto;width: 1000px;">
 
          <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
         {{ form.as_p }}

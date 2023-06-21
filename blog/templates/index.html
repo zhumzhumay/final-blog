@@ -24,6 +24,7 @@
 								 <input type="submit" name="submit" value="Найти" placeholder="Поиск"/>
 								 <input type="submit" name="takeoff" value="Сбросить" placeholder="Поиск"/>
 							<div>
+								<p>  </p>
 						
 							{% csrf_token %}{{ sortform.as_p }}<input type="submit" name="submit" value="Сортировать" placeholder="Поиск"/>
 						</div>
@@ -78,7 +79,7 @@
 											<a href="http://127.0.0.1:8000/${data.results[i].user_info.username}/profile/" class="author"><span class="name">${data.results[i].user_info.first_name} </span><img src="${data.results[i].user_info.avatar} " alt="" /></a>
 										</div>
 									</header>
-									<a href="http://127.0.0.1:8000/single_post/${data.results[i].id}/${data.results[i].title}" class="image featured"><img src="${data.results[i].image} " alt="" /></a>
+									<a href="http://127.0.0.1:8000/single_post/${data.results[i].id}/${data.results[i].title}" class="image featured"><img class='indexpostimg' src="${data.results[i].image} " alt=""/></a>
 									
 									<footer>
 										<ul class="actions">
